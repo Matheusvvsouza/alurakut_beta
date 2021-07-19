@@ -23,7 +23,30 @@ function ProfileSidebar(propriedades)
   )
 }
 
+function ProfileRelationsBox(propriedades){
+  return (
+         <ProfileRelationsBoxWrapper>
+  <h2 className="smallTitle">
+     {propriedades.title} ({propriedades.itens.length})
+    </h2>
+  <ul>
+  {/*seguidores.map((itemAtual)=>
+  {
+    return (
+      <li key={itemAtual}>
+      <a href={`https://github.com/${itemAtual.title}.png`}>
+      <img src= {itemAtual.image} />
+      <span>{itemAtual.title}</span>
+      </a>
+      </li>
+    )
+  })*/}
+  </ul> 
 
+  </ProfileRelationsBoxWrapper>
+  )
+}
+  
 
 
 
@@ -45,9 +68,23 @@ export default function Home() {
   'peas',
   'rafaballerini',
   'marcobrunodev',
-  'LuiseKelles',
   'felipefialho'
   ]
+  // 0 - Pegar o array de dados do github
+
+  React.useEffect(function(){
+     fetch('https://api.github.com/users/peas/followers')
+    .then(function (respostaDoServidor){
+      return respostaDoServidor.json();
+    })
+    .then(function(respostaCompleta){
+      console.log(respostaCompleta);
+    })
+  })
+  console.log('seguidores antes do return',seguidores);
+
+  // 1 - Criar um box que vai ter um map, baseado nos items do array
+  // que pegamos do github
 
   return (
     <div>
@@ -97,8 +134,9 @@ export default function Home() {
        />
        </div>
        <div>
-      <input placeholder="Coloque uma URL para usarmos de capa"
-       name="title" 
+      <input 
+      placeholder="Coloque uma URL para usarmos de capa"
+       name="image" 
        aria-label="Coloque uma URL para usarmos de capa"
        
        />
@@ -111,6 +149,9 @@ export default function Home() {
     </Box>
     </div>
     <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
+   <ProfileRelationsBox title="Seguidores" items={seguidores}/>
+
+
     <ProfileRelationsBoxWrapper>
     <h2 className="smallTitle">
         Comunidades ({comunidades.length}){
@@ -141,7 +182,7 @@ export default function Home() {
     {
       return (
         <li key ={itemAtual}>
-        <a href={`/user/$(itematual)`}>
+        <a href={`/user/${itemAtual}`}>
         <img src= {`https://github.com/${itemAtual}.png`}/>
         <span>{itemAtual}</span>
         </a>
